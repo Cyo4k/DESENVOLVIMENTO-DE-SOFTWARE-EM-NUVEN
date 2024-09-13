@@ -1,47 +1,52 @@
-<!DOCTYPE html>
-<html lang="pt-br" data-bs-theme="light" >
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/parse@5.3.0/dist/parse.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <title>Lista de Veículos</title>
-    <style>
-         table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
-    
-    <h1>Lista de Veículos</h1>
-    <table border="2">
-        <thead>
-            <tr>
-                <th>Marca</th>
-                <th>Modelo</th>
-                <th>Cor</th>
-                <th>Ano</th>
-                <th>Preço</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody id="listaVeiculos">
-            <!-- Os veículos serão adicionados aqui -->
-        </tbody>
-    </table>
+Parse.serverURL = "https://parseapi.back4app.com";
+Parse.initialize("ziF0QzwENpNeDImCmQ6BicKnwIB2dYCO035Em9pL", "9Pz6oMi7vMZOZNB7i68s4vJq2TFxR6qEZsSJp6id");
 
-    <script src="listarveiculos.js"> </script>
+const Veiculos = Parse.Object.extend("Carro");
+const query = new Parse.Query(Veiculos);
 
-</body>
-</html>
+query.find().then((resultados) => {
+
+    const tabelaVeiculos = document.getElementById("listaVeiculos");
+
+    resultados.forEach((veiculo) => {
+        const id = veiculo.id;
+        const marca = veiculo.get("marca");
+        const model = veiculo.get("model");
+        const cor = veiculo.get("cor");
+        const price = veiculo.get("price");
+        const ano = veiculo.get("ano");
+
+     
+        const linha = document.createElement("tr");
+        linha.innerHTML = `
+            <td>${marca}</td>
+            <td>${model}</td>
+            <td>${cor}</td>
+            <td>${ano}</td>
+            <td>R$ ${price.toFixed(2)}</td>
+            <td>
+                <button onclick="excluirVeiculo('${id}')">Excluir</button>
+            </td>
+        `;
+
+        tabelaVeiculos.appendChild(linha);
+    });
+}).catch((erro) => {
+    console.error("Erro ao buscar veículos:", erro);
+});
+
+async function excluirVeiculo(id) {
+    try {
+        const query = new Parse.Query("Carro");
+        const veiculo = await query.get(id);
+
+        await veiculo.destroy();
+
+        alert("Veículo excluído com sucesso!");
+
+        document.querySelector(`button[onclick="excluirVeiculo('${id}')"]`).closest("tr").remove();
+    } catch (erro) {
+        console.error("Erro ao excluir veículo:", erro);
+        alert("Erro ao excluir veículo.");
+    }
+}
