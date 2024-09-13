@@ -1,7 +1,14 @@
 # Sistema de Gerenciamento de Veiculos
 
 Projeto desenvolvido em equipe para a disciplina de desenvolvimento de software em nuvem.
-
+onde a prosposta do projeto seria utilizar serviços em nuvem para da apoio ao desenvolvimento do projeto.
+- Explorar o uso de plataformas como serviço na nuvem;
+- Desenvolver aplicações diretamente na nuvem; 
+- Realizar a implantação de software na nuvem, utilizando serviços
+como o Vercel (ou similares) para o front-end e o Back4App (ou
+serviços equivalentes) para o back-end; 
+- Fazer a integração do código-fonte na nuvem; 
+- Hospedar o código-fonte em um repositório remoto na nuvem
 
 ## Tecnologias utilizada
 
